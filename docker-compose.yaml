@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    restart: always
+    tty: true
+    volumes:
+      - ./app:/app
+  postgres:
+    image: postgres:17.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+      TZ: 'Asia/Tokyo'
+    ports:
+      - 5432:5432
