@@ -1,21 +1,27 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCarDto } from './dto/create-car.dto';
+import { Inject, Injectable } from '@nestjs/common';
+import { CreateCarDto } from '~/car/dto/create-car.dto';
+import { CarEntity } from '~/database/entity/car.entity';
+import { CarRepository } from "~/database/repository/car.repository";
 
 @Injectable()
 export class CarService {
-  create(createCarDto: CreateCarDto) {
-    return 'This action adds a new car';
+  constructor(
+    @Inject(CarRepository) private readonly carRepository: CarRepository
+  ) {}
+
+  async create(createCarDto: CreateCarDto): Promise<CarEntity> {
+    return this.carRepository.create(createCarDto);
   }
 
-  findAll() {
-    return `This action returns all car`;
-  }
+    findAll(): CarEntity[] {
+      return [];
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} car`;
-  }
+    findOne(id: number): CarEntity {
+      return null;
+    }
 
-  searchAvailableCars() {
-    return `available cars`;
-  }
+    searchAvailableCars(): CarEntity[] {
+      return [];
+    }
 }
