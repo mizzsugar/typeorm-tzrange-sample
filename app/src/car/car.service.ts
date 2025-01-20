@@ -17,8 +17,8 @@ export class CarService {
       return [];
     }
 
-    findOne(id: number): CarEntity {
-      return null;
+    findOne(id: number): Promise<CarEntity | null> {
+      return this.carRepository.findOne(id);
     }
 
     searchAvailableCars(): CarEntity[] {

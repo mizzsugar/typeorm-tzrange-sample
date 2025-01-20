@@ -29,13 +29,13 @@ describe('CarController (e2e)', () => {
     expect(createdBody.model).toEqual("car model");
     expect(createdBody.manufacturingYear).toEqual(2021);
 
-    // const getRes: { body: CarEntity } = await request(app.getHttpServer())
-    //   .get(`/car/${createdBody.id}`)
-    //   .expect(200);
+    const getRes: { body: CarEntity } = await request(app.getHttpServer())
+      .get(`/car/${createdBody.id}`)
+      .expect(200);
 
-    // const gottenBody = getRes.body;
-    // expect(gottenBody.name).toEqual("car name");
-    // expect(gottenBody.model).toEqual("car model");
-    // expect(gottenBody.manufacturingYear).toEqual(2021);
+    const gottenBody = getRes.body;
+    expect(gottenBody.name).toEqual("car name");
+    expect(gottenBody.model).toEqual("car model");
+    expect(gottenBody.manufacturingYear).toEqual(2021);
   });
 });

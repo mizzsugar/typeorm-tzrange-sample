@@ -20,4 +20,8 @@ export class CarRepository {
 
     return this.carRepository.save(car);
   }
+
+  async findOne(id: number): Promise<CarEntity | null> {
+    return this.carRepository.findOneBy({id: id});
+  }
 }
