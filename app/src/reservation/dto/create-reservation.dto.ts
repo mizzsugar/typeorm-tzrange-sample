@@ -3,7 +3,7 @@ import { IsNumber, IsNotEmpty, IsISO8601 } from 'class-validator';
 export class CreateReservationDto {
     @IsNumber()
     @IsNotEmpty()
-    car_id: number;
+    carId: number;
   
     @IsISO8601()
     @IsNotEmpty()
