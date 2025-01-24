@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Repository, EntityManager } from "typeorm";
 
 import { ReservationEntity } from "../entity/reservation.entity";
 import { CreateReservationDto } from "~/reservation/dto/create-reservation.dto";
@@ -12,17 +12,19 @@ export class ReservationRepository {
     private readonly reservationRepository: Repository<ReservationEntity>
   ) {}
 
-  async create(createReservationDto: CreateReservationDto): Promise<ReservationEntity> {
+  async create(createReservationDto: CreateReservationDto, manager?: EntityManager): Promise<ReservationEntity> {
+    const repo = manager?.getRepository(ReservationEntity) ?? this.reservationRepository;
     const reservation = new ReservationEntity();
     const timeRange = `[${createReservationDto.startTime},${createReservationDto.endTime}]`;
     reservation.car_id = createReservationDto.carId;
     reservation.reservation_time = timeRange;
-    return this.reservationRepository.save(reservation);
+    return repo.save(reservation);
   }
 
-  async checkIfCarIsAvailable(carId: number, startTime: string, endTime: string): Promise<boolean> {
+  async checkIfCarIsAvailable(carId: number, startTime: string, endTime: string, manager?: EntityManager): Promise<boolean> {
+    const repo = manager?.getRepository(ReservationEntity) ?? this.reservationRepository;
     const timeRange = `[${startTime},${endTime}]`;
-    const conflictingReservation = await this.reservationRepository
+    const conflictingReservation = await repo
       .createQueryBuilder('reservation')
       .where('reservation.car_id = :carId', { carId: carId })
       .andWhere('reservation.reservation_time && :timeRange::tstzrange', { 
