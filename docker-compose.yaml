@@ -11,6 +11,8 @@ services:
     tty: true
     volumes:
       - ./app:/app
+    depends_on:
+      - postgres
   postgres:
     image: postgres:17.2
     environment:
