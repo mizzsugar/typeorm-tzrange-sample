@@ -4,9 +4,12 @@ import * as request from 'supertest';
 import { AppModule } from '~/app.module';
 import { CarEntity } from '~/database/entity/car.entity';
 import { ReservationResponseDto } from '~/reservation/dto/reservation-response.dto';
+import { DataSource } from 'typeorm';
 
 describe('ReservatoinController (e2e)', () => {
     let app: INestApplication;
+    let dataSource: DataSource;
+  
 
     beforeEach(async () => {
         const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -14,7 +17,13 @@ describe('ReservatoinController (e2e)', () => {
         }).compile();
 
         app = moduleFixture.createNestApplication();
+        dataSource = moduleFixture.get<DataSource>(DataSource);
         await app.init();
+    });
+
+    afterEach(async () => {
+        await dataSource.query('TRUNCATE TABLE reservations CASCADE');
+        await dataSource.query('TRUNCATE TABLE cars CASCADE');
     });
 
     it('can make a reservation if available', async () => {

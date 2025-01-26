@@ -31,6 +31,11 @@ describe('ReservationRepository', () => {
    reservationRepository = moduleRef.get<ReservationRepository>(ReservationRepository);
  });
 
+ afterEach(async () => {
+    await dataSource.query('TRUNCATE TABLE reservations CASCADE');
+    await dataSource.query('TRUNCATE TABLE cars CASCADE');
+ });
+
  describe('checkIfCarIsAvailable', () => {
     let car: CarEntity;
    
