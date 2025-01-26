@@ -3,6 +3,8 @@ import { DataSource } from 'typeorm';
 import { ConflictException } from '@nestjs/common';
 import { ReservationRepository } from '~/database/repository/reservation.repository';
 import { CreateReservationDto } from '~/reservation/dto/create-reservation.dto';
+import { ReservationResponseDto } from '~/reservation/dto/reservation-response.dto';
+
 
 @Injectable()
 export class ReservationService {
@@ -35,7 +37,7 @@ export class ReservationService {
       );
 
       await queryRunner.commitTransaction();
-      return reservation;
+      return ReservationResponseDto.fromEntity(reservation);;
 
     } catch (err) {
       await queryRunner.rollbackTransaction();
