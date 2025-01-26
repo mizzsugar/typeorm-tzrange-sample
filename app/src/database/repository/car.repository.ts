@@ -22,6 +22,23 @@ export class CarRepository {
   }
 
   async findOne(id: number): Promise<CarEntity | null> {
-    return this.carRepository.findOneBy({id: id});
+    return this.carRepository.findOneBy({ id: id });
+  }
+
+  async findAvaliableCars(startTime: string, endTime: string): Promise<CarEntity[]> {
+    const timeRange = `[${startTime},${endTime}]`;
+
+    return this.carRepository.createQueryBuilder('car')
+      .where((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('reservation.car_id')
+          .from('reservations', 'reservation')
+          .where('reservation.reservation_time && :timeRange::tstzrange')
+          .getQuery();
+        return `car.id NOT IN ${subQuery}`;
+      })
+      .setParameter('timeRange', timeRange)
+      .getMany();
   }
 }
