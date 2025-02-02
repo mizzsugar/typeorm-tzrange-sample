@@ -1,4 +1,4 @@
-import { IsNumber, IsNotEmpty, IsISO8601 } from 'class-validator';
+import { IsNumber, IsNotEmpty, IsISO8601, ValidateIf, Validate } from 'class-validator';
 
 export class CreateReservationDto {
     @IsNumber()
@@ -11,6 +11,9 @@ export class CreateReservationDto {
   
     @IsISO8601()
     @IsNotEmpty()
+    @ValidateIf((_, value) => value !== undefined)
+    @Validate((_, value) => value > _.startTime, {
+        message: 'endTime must be greater than startTime',
+    })
     endTime: string;
 }
-  
