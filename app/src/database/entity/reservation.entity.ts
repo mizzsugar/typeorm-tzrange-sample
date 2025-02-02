@@ -1,5 +1,5 @@
 
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, Index } from "typeorm";
 import { CarEntity } from "./car.entity";
 
 @Entity({ name: 'reservations' })
@@ -12,6 +12,7 @@ export class ReservationEntity {
     car_id: number;
 
     @Column({ type: 'tstzrange' })
+    @Index({ spatial: true })  // GiSTインデックスを作成するため
     reservation_time: string;
 
     @CreateDateColumn({ name: 'created_at', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
