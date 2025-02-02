@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Param, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, NotFoundException, HttpCode } from '@nestjs/common';
 import { CarService } from './car.service';
 import { CreateCarDto } from './dto/create-car.dto';
+import { SearchAvailableCarsDto } from './dto/search-available-cars-dto';
 
 @Controller('car')
 export class CarController {
@@ -23,5 +24,11 @@ export class CarController {
       throw new NotFoundException();
     }
     return car;
+  }
+
+  @Post('search')
+  @HttpCode(200)
+  searchAvailableCars(@Body() request: SearchAvailableCarsDto) {
+    return this.carService.searchAvailableCars(request.startTime, request.endTime);
   }
 }

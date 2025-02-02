@@ -21,7 +21,7 @@ export class CarService {
       return this.carRepository.findOne(id);
     }
 
-    searchAvailableCars(): CarEntity[] {
-      return [];
+    async searchAvailableCars(startTime: string, endTime: string): Promise<CarEntity[]> {
+      return this.carRepository.findAvaliableCars(startTime, endTime);
     }
 }
